@@ -140,11 +140,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Reader.cpp" />
     <ClCompile Include="src\Checker.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Checker.h" />
+    <ClInclude Include="headers\Reader.h" />
+    <ClInclude Include="headers\Writer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

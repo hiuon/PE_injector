@@ -2,7 +2,7 @@
 #include <iostream>
 #include <filesystem>
 
-int Checker::check_params(int argc, char* argv[], char*& in, char*& out)
+int check_params(int argc, char* argv[], char*& in, char*& out)
 {
 	if (argc < 3) {
 		std::cout << "Not enough arguments. Bye...\n";

@@ -3,6 +3,8 @@
 #include <vector>
 #include <map>
 #include "./headers/Checker.h"
+#include "./headers/Reader.h"
+#include "./headers/Writer.h"
 
 enum STATUS_CODE
 {
@@ -10,7 +12,8 @@ enum STATUS_CODE
 	STATUS_ER_PATH,
 	STATUS_ER_READ,
 	STATUS_ER_WRITE,
-	STATUS_ER_PARAM
+	STATUS_ER_PARAM,
+	STATUS_ER_NOT_PE
 };
 
 int main(int argc, char* argv[]) {
@@ -19,9 +22,9 @@ int main(int argc, char* argv[]) {
 	char* input_path = nullptr;
 	char* output_path = nullptr;
 
-	STATUS_CODE status;
+	STATUS_CODE status = STATUS_OK;
 
-	status = (STATUS_CODE)Checker::check_params(argc, argv, input_path, output_path);
+	status = (STATUS_CODE)check_params(argc, argv, input_path, output_path);
 
 	if (STATUS_OK != status) {
 		return status;
@@ -32,10 +35,18 @@ int main(int argc, char* argv[]) {
 
 
 	//read file
-	//Helper::read_binary(values, in, e);
+	status = (STATUS_CODE)read_pe_header(input_path, data_pe_header);
+
+	if (STATUS_OK != status) {
+		return status;
+	}
 
 	//write json file
-	//Helper::write_to_json(output_path, fields, values);
+	status = (STATUS_CODE)write_pe_header(output_path, data_pe_header);
+
+	if (STATUS_OK != status) {
+		return status;
+	}
 
 
 	return 0;
