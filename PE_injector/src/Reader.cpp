@@ -4,6 +4,9 @@
 #include <iostream>
 #include <sstream>
 
+unsigned int pe_start = 0;
+unsigned int os_type = 0;
+
 int read_pe_header(char* in_path, std::map<std::string, std::string>& data)
 {
 	std::ifstream in(in_path, std::ios::in | std::ios::binary);
@@ -25,7 +28,7 @@ int read_pe_header(char* in_path, std::map<std::string, std::string>& data)
 	in.read(temp, 4);
 
 	//go to pe header
-	unsigned int pe_start = get_byte(temp);
+	pe_start = get_byte(temp);
 
 	in.seekg(pe_start);
 
@@ -42,7 +45,7 @@ int read_pe_header(char* in_path, std::map<std::string, std::string>& data)
 	data["flags"] = get_field(temp, 2);
 
 	//add kostyl' )
-	int os_type = 4;
+	os_type = 4;
 	if ((temp[1] & 0x01) == 0x01) {
 		os_type = 0;
 	}
@@ -123,4 +126,27 @@ std::string get_field(char* t, size_t size)
 	}
 	ss << to_hex(t[0]);
 	return ss.str();
+}
+
+int read_sections(char* input, std::vector<std::string>& data) {
+	std::ifstream in(input, std::ios::binary);
+	char temp[8] = { 0,0,0,0,0,0,0,0 };
+
+	in.seekg(pe_start);
+
+	in.seekg(0x6, std::ios::cur);
+	in.read(temp, 2);
+	size_t num_sections = (temp[1] <<= 8) + temp[0];
+
+	data.resize(num_sections);
+
+
+	for (size_t index = 0; index < data.size(); ++index) {
+		in.seekg(pe_start+index*0x28);
+		in.seekg(0xf8, std::ios::cur);
+		in.read(temp, 8);
+		data[index] = temp;
+	}
+	in.close();
+	return 0;
 }

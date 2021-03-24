@@ -33,6 +33,8 @@ int main(int argc, char* argv[]) {
 	//necessary fields of pe header
 	std::map<std::string, std::string> data_pe_header = { {"cputype", ""}, {"flags", ""}, {"imgbase", ""}, {"imagesize", ""}, {"subsystem", ""}, {"exprva", ""}, {"imprva", ""} };
 
+	//sections
+	std::vector<std::string> data_sections;
 
 	//read file
 	status = (STATUS_CODE)read_pe_header(input_path, data_pe_header);
@@ -48,6 +50,14 @@ int main(int argc, char* argv[]) {
 		return status;
 	}
 
+	status = (STATUS_CODE)read_sections(input_path, data_sections);
+
+	if (STATUS_OK != status) {
+		return status;
+	}
+
+	status = (STATUS_CODE)write_sections(output_path, data_sections);
+	
 
 	return 0;
 }

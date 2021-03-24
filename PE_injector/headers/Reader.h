@@ -11,3 +11,6 @@ std::string to_hex(char t);
 unsigned int get_byte(char* temp);
 
 std::string get_field(char* t, size_t size);
+
+int read_sections(char* input, std::vector<std::string>& data);
+
