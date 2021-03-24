@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	//necessary fields of pe header
-	std::map<std::string, std::string> data_pe_header = { {"cputype", ""}, {"flags", ""}, {"imgbase", ""}, {"imagesize", ""}, {"subsystem", ""}, {"exprva", ""}, {"imprva", ""} };
+	std::map<std::string, std::string> data_pe_header;
 
 	//sections
 	std::vector<std::string> data_sections;
