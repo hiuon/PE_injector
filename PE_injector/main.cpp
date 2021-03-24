@@ -1,28 +1,35 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <map>
+#include "./headers/Checker.h"
 
+enum STATUS_CODE
+{
+	STATUS_OK,
+	STATUS_ER_PATH,
+	STATUS_ER_READ,
+	STATUS_ER_WRITE,
+	STATUS_ER_PARAM
+};
 
 int main(int argc, char* argv[]) {
 
 	//check params
-	std::string input_path;
-	std::string output_path;
-	//int e = Checker::check(argc, argv, input_path, output_path);
+	char* input_path = nullptr;
+	char* output_path = nullptr;
 
-	//if smth wrong -> exit
-	//if (e != 0) {
-	//	return -1;
-	//}
+	STATUS_CODE status;
 
-	//start read binary file
-	std::ifstream in(input_path, std::ios::in | std::ios::binary);
+	status = (STATUS_CODE)Checker::check_params(argc, argv, input_path, output_path);
 
+	if (STATUS_OK != status) {
+		return status;
+	}
 
+	//necessary fields of pe header
+	std::map<std::string, std::string> data_pe_header = { {"cputype", ""}, {"flags", ""}, {"imgbase", ""}, {"imagesize", ""}, {"subsystem", ""}, {"exprva", ""}, {"imprva", ""} };
 
-	//necessary fields of pe file
-	std::vector<std::string> fields{ "cputype","flags","imgbase","imagesize","subsystem", "exprva", "imprva" };
-	std::vector<std::string> values{ "cputype","flags","imgbase","imagesize","subsystem", "exprva", "imprva" };
 
 	//read file
 	//Helper::read_binary(values, in, e);
