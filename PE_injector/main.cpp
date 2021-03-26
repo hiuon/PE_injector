@@ -5,6 +5,7 @@
 #include "./headers/Checker.h"
 #include "./headers/Reader.h"
 #include "./headers/Writer.h"
+#include "./headers/Program.h"
 
 enum STATUS_CODE
 {
@@ -29,6 +30,9 @@ int main(int argc, char* argv[]) {
 	if (STATUS_OK != status) {
 		return status;
 	}
+
+	Program parser = Program(input_path, output_path, false);
+	parser.check();
 
 	//necessary fields of pe header
 	std::map<std::string, std::string> data_pe_header;

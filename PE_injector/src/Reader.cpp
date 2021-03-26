@@ -166,7 +166,7 @@ int read_sections(char* input, std::vector<std::string>& data) {
 
 		in.read(temp, 4);
 		unsigned int pointer_to_raw = get_byte(temp);
-		if (import_addr > va && import_addr < va + size_raw) {
+		if (import_addr >= va && import_addr < va + size_raw) {
 			import_addr = import_addr - va + pointer_to_raw;
 			va_gl = va;
 			raw_gl = pointer_to_raw;
