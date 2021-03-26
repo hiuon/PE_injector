@@ -194,8 +194,10 @@ int read_imports(char* input, std::vector<std::string>& data)
 		in.read(temp, 256);
 		data.push_back(temp);
 		index++;
-		in.seekg(import_addr + index * 0x14);
+
+		in.seekg(import_addr + 0xc + index * 0x14);
 		in.read(name, 4);
+
 	} while (name[0] != '\0');
 	
 	in.close();
