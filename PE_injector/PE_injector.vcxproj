@@ -140,6 +140,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\PEFile.cpp" />
+    <ClCompile Include="src\Program.cpp" />
     <ClCompile Include="src\Reader.cpp" />
     <ClCompile Include="src\Checker.cpp" />
     <ClCompile Include="main.cpp" />
@@ -147,8 +149,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Checker.h" />
+    <ClInclude Include="headers\Program.h" />
     <ClInclude Include="headers\Reader.h" />
     <ClInclude Include="headers\Writer.h" />
+    <ClInclude Include="headers\PEFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -36,6 +36,9 @@ int main(int argc, char* argv[]) {
 	//sections
 	std::vector<std::string> data_sections;
 
+	//imports
+	std::vector<std::string> data_imports;
+
 	//read file
 	status = (STATUS_CODE)read_pe_header(input_path, data_pe_header);
 
@@ -58,6 +61,9 @@ int main(int argc, char* argv[]) {
 
 	status = (STATUS_CODE)write_sections(output_path, data_sections);
 	
+	status = (STATUS_CODE)read_imports(input_path, data_imports);
+
+	status = (STATUS_CODE)write_imports(output_path, data_imports);
 
 	return 0;
 }

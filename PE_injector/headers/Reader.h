@@ -14,3 +14,5 @@ std::string get_field(char* t, size_t size);
 
 int read_sections(char* input, std::vector<std::string>& data);
 
+int read_imports(char* input, std::vector<std::string>& data);
+

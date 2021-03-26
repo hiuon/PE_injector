@@ -6,6 +6,11 @@
 
 unsigned int pe_start = 0;
 unsigned int os_type = 0;
+unsigned int import_addr = 0;
+unsigned int export_addr = 0;
+unsigned int img_base = 0;
+unsigned int va_gl = 0;
+unsigned int raw_gl = 0;
 
 int read_pe_header(char* in_path, std::map<std::string, std::string>& data)
 {
@@ -58,6 +63,7 @@ int read_pe_header(char* in_path, std::map<std::string, std::string>& data)
 	in.seekg(0x34 - os_type, std::ios::cur);
 	in.read(temp, 4 + os_type);
 	data["imgbase"] = get_field(temp, 4 + os_type);
+	img_base = get_byte(temp);
 
 	in.seekg(pe_start);
 
@@ -80,13 +86,14 @@ int read_pe_header(char* in_path, std::map<std::string, std::string>& data)
 	in.seekg(0x78 + os_type * 4, std::ios::cur);
 	in.read(temp, 4);
 	data["exprva"] = get_field(temp, 4);
-
+	export_addr = get_byte(temp);
 	in.seekg(pe_start);
 	//as well as read exprva add 0x10
 	//read imprva
 	in.seekg(0x80 + os_type * 4, std::ios::cur);
 	in.read(temp, 4);
 	data["imprva"] = get_field(temp, 4);
+	import_addr = get_byte(temp);
 
 
 	in.close();
@@ -140,13 +147,58 @@ int read_sections(char* input, std::vector<std::string>& data) {
 
 	data.resize(num_sections);
 
+	
+
+
 
 	for (size_t index = 0; index < data.size(); ++index) {
 		in.seekg(pe_start+index*0x28);
 		in.seekg(0xf8, std::ios::cur);
 		in.read(temp, 8);
 		data[index] = temp;
+
+		in.seekg(0x4, std::ios::cur);
+		in.read(temp, 4);
+		unsigned int va = get_byte(temp);
+
+		in.read(temp, 4);
+		unsigned int size_raw = get_byte(temp);
+
+		in.read(temp, 4);
+		unsigned int pointer_to_raw = get_byte(temp);
+		if (import_addr > va && import_addr < va + size_raw) {
+			import_addr = import_addr - va + pointer_to_raw;
+			va_gl = va;
+			raw_gl = pointer_to_raw;
+		}
+		
 	}
 	in.close();
+	return 0;
+}
+
+int read_imports(char* input, std::vector<std::string>& data)
+{
+	std::ifstream in(input, std::ios::binary);
+	
+	char temp[256] = {0};
+	char name[4] = {0};
+	size_t index = 0;
+	do {
+		in.seekg(import_addr + 0xc + index*0x14);
+		in.read(name, 4);
+
+		unsigned int ptr_to_name = get_byte(name);
+		ptr_to_name = ptr_to_name - va_gl + raw_gl;
+		in.seekg(ptr_to_name);
+		in.read(temp, 256);
+		data.push_back(temp);
+		index++;
+		in.seekg(import_addr + index * 0x14);
+		in.read(name, 4);
+	} while (name[0] != '\0');
+	
+	in.close();
+
 	return 0;
 }
