@@ -10,7 +10,8 @@ enum STATUS_CODE {
 	STATUS_ER_READ = 12,
 	STATUS_ER_WRITE = 13,
 	STATUS_ER_PARAM = 20,
-	STATUS_ER_NOT_PE = 30
+	STATUS_ER_NOT_PE = 30,
+	STATUS_ER_NOT_I386 = 40
 };
 
 int check_params(int argc, char* argv[], char*& in, char*& out, bool& b);

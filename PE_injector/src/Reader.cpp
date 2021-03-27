@@ -1,4 +1,5 @@
 #include "../headers/Reader.h"
+#include "../headers/Checker.h"
 #include <map>
 #include <fstream>
 #include <iostream>
@@ -15,7 +16,7 @@ int read_pe_header(const std::string& in_path, std::map<std::string, std::string
 	//if not PE -> end
 	if (temp[0] != 0x4d && temp[1] != 0x5a) {
 		std::cout << "It is not PE file. Bye...\n";
-		return 5;
+		return STATUS_ER_NOT_PE;
 	}
 
 	//go to here
@@ -42,10 +43,13 @@ int read_pe_header(const std::string& in_path, std::map<std::string, std::string
 	data["flags"] = get_field(temp, 2);
 
 	//add kostyl' )
-	os_type = 4;
-	if ((temp[1] & 0x01) == 0x01) {
-		os_type = 0;
+	os_type = 0;
+	if ((temp[1] & 0x01) != 0x01) {
+		os_type = 4;
+		std::cout << "64bit file. Bye...\n";
+		return STATUS_ER_NOT_I386;
 	}
+	
 
 	in.seekg(pe_start);
 

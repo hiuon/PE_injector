@@ -1,0 +1,28 @@
+{
+	"cputype" : "0x014c",
+	"exprva" : "0x00000000",
+	"flags" : "0x0102",
+	"imgbase" : "0x00400000",
+	"imgsize" : "0x0000915c",
+	"imprva" : "0x0000309c",
+	"subsystem" : "0x0002",
+	"sections" : 
+	[
+		".text",
+		".data",
+		".idata",
+		".rsrc",
+		".reloc"
+	],
+	
+	"imports" : 
+	[
+		"SHELL32.dll",
+		"KERNEL32.dll",
+		"msvcrt.dll",
+		"ADVAPI32.dll",
+		"api-ms-win-core-synch-l1-2-0.dll",
+		"api-ms-win-core-processthreads-l1-1-0.dll",
+		"api-ms-win-core-libraryloader-l1-2-0.dll"
+	]
+}

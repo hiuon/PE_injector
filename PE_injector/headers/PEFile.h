@@ -1,10 +1,8 @@
 #pragma once
-#include <map>
-#include <fstream>
 #include <iostream>
-#include <sstream>
+#include <map>
 #include <vector>
-#include <filesystem>
+#include <string>
 
 class PEFile
 {

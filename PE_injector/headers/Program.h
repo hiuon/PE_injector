@@ -12,7 +12,7 @@ private:
 	std::string input_path;
 	std::string output_path;
 	bool is_injector = false;
-	int is_ok = true;
+	int is_ok = 0;
 public:
 	Program(int argc, char* argv[]);
 
