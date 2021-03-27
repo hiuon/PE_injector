@@ -4,15 +4,29 @@
 #include <sstream>
 #include <vector>
 #include "../headers/Program.h"
+#include "../headers/Checker.h"
+#include "../headers/PEFile.h"
 
-Program::Program(char* in, char* out, bool b)
+Program::Program(int argc, char* argv[])
 {
+	char* in = nullptr;
+	char* out = nullptr;
+	if (check_params(argc, argv, in, out, is_injector)) {
+		is_ok = false;
+	};
 	input_path.assign(in);
 	output_path.assign(out);
-	is_injector = b;
 }
 
-void Program::check()
+int Program::start()
 {
-	std::cout << input_path << '\n' << output_path << '\n' << is_injector;
+	PEFile pe = PEFile(input_path, output_path);
+	if (is_injector) {
+		return pe.Inject();
+	}
+	else {
+		pe.Read();
+		pe.Write();
+	}
+	return STATUS_OK;
 }

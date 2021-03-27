@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-int write_pe_header(char* out, const std::map<std::string, std::string>& data)
+int write_pe_header(const std::string& out, const std::map<std::string, std::string>& data)
 {
 	std::fstream out_file(out, std::ios::out);
 	out_file << "{\n";
@@ -15,7 +15,7 @@ int write_pe_header(char* out, const std::map<std::string, std::string>& data)
 	return 0;
 }
 
-int write_sections(char* out, const std::vector<std::string>& data)
+int write_sections(const std::string& out, const std::vector<std::string>& data)
 {
 	std::fstream out_file(out, std::ios::out | std::ios::app);
 	out_file << "\t\"sections\" : \n\t[\n";
@@ -28,7 +28,7 @@ int write_sections(char* out, const std::vector<std::string>& data)
 	return 0;
 }
 
-int write_imports(char* out, const std::vector<std::string>& data)
+int write_imports(const std::string& out, const std::vector<std::string>& data)
 {
 	std::fstream out_file(out, std::ios::out | std::ios::app);
 	out_file << "\t\"imports\" : \n\t[\n";

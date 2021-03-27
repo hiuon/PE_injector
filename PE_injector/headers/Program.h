@@ -4,14 +4,17 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <filesystem>
+
 
 class Program {
 private:
 	std::string input_path;
 	std::string output_path;
 	bool is_injector = false;
+	int is_ok = true;
 public:
-	Program(char* in, char* out, bool b);
+	Program(int argc, char* argv[]);
 
-	void check();
+	int start();
 };

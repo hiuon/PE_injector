@@ -4,15 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-unsigned int pe_start = 0;
-unsigned int os_type = 0;
-unsigned int import_addr = 0;
-unsigned int export_addr = 0;
-unsigned int img_base = 0;
-unsigned int va_gl = 0;
-unsigned int raw_gl = 0;
-
-int read_pe_header(char* in_path, std::map<std::string, std::string>& data)
+int read_pe_header(const std::string& in_path, std::map<std::string, std::string>& data, unsigned int& os_type, unsigned int& import_addr, unsigned int& pe_start)
 {
 	std::ifstream in(in_path, std::ios::in | std::ios::binary);
 	//4 byte buffer
@@ -63,7 +55,6 @@ int read_pe_header(char* in_path, std::map<std::string, std::string>& data)
 	in.seekg(0x34 - os_type, std::ios::cur);
 	in.read(temp, 4 + os_type);
 	data["imgbase"] = get_field(temp, 4 + os_type);
-	img_base = get_byte(temp);
 
 	in.seekg(pe_start);
 
@@ -86,7 +77,6 @@ int read_pe_header(char* in_path, std::map<std::string, std::string>& data)
 	in.seekg(0x78 + os_type * 4, std::ios::cur);
 	in.read(temp, 4);
 	data["exprva"] = get_field(temp, 4);
-	export_addr = get_byte(temp);
 	in.seekg(pe_start);
 	//as well as read exprva add 0x10
 	//read imprva
@@ -135,7 +125,7 @@ std::string get_field(char* t, size_t size)
 	return ss.str();
 }
 
-int read_sections(char* input, std::vector<std::string>& data) {
+int read_sections(const std::string& input, std::vector<std::string>& data, unsigned int pe_start, unsigned int& import_addr, unsigned int& va_gl, unsigned int& raw_gl) {
 	std::ifstream in(input, std::ios::binary);
 	char temp[8] = { 0,0,0,0,0,0,0,0 };
 
@@ -177,7 +167,7 @@ int read_sections(char* input, std::vector<std::string>& data) {
 	return 0;
 }
 
-int read_imports(char* input, std::vector<std::string>& data)
+int read_imports(const std::string& input, std::vector<std::string>& data,unsigned int import_addr, unsigned int va_gl, unsigned int raw_gl)
 {
 	std::ifstream in(input, std::ios::binary);
 	
