@@ -11,34 +11,36 @@ Program::Program(int argc, char* argv[])
 {
 	char* in = nullptr;
 	char* out = nullptr;
-	if (int e = check_params(argc, argv, in, out, is_injector)) {
+	STATUS_CODE e = check_params(argc, argv, in, out, is_injector);
+	if (e != STATUS_CODE::STATUS_OK) {
 		is_ok = e;
 	}
 	else {
+		is_ok = STATUS_CODE::STATUS_OK;
 		input_path.assign(in);
 		output_path.assign(out);
 	}
 
 }
 
-int Program::start()
+enum class STATUS_CODE Program::start()
 {
-	if (is_ok) return is_ok;
+	if (is_ok != STATUS_CODE::STATUS_OK) return is_ok;
 	PEFile pe = PEFile(input_path, output_path);
 	if (is_injector) {
 		return pe.Inject();
 	}
 	else {
-		int e = pe.Read();
-		if (e != STATUS_OK)
+		STATUS_CODE e = pe.Read();
+		if (e != STATUS_CODE::STATUS_OK)
 		{
 			return e;
 		}
 		e = pe.Write();
-		if (e != STATUS_OK)
+		if (e != STATUS_CODE::STATUS_OK)
 		{
 			return e;
 		}
 	}
-	return STATUS_OK;
+	return STATUS_CODE::STATUS_OK;
 }

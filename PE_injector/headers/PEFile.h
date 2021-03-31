@@ -21,11 +21,11 @@ private:
 public:
 	PEFile(const std::string& in, const std::string& out);
 
-	int Read();
+	enum class STATUS_CODE Read();
 
-	int Write();
+	enum class STATUS_CODE Write();
 
-	int Inject();
+	enum class STATUS_CODE Inject();
 
 };
 

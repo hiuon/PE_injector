@@ -12,9 +12,9 @@ private:
 	std::string input_path;
 	std::string output_path;
 	bool is_injector = false;
-	int is_ok = 0;
+	enum class STATUS_CODE is_ok;
 public:
 	Program(int argc, char* argv[]);
 
-	int start();
+	enum class STATUS_CODE start();
 };

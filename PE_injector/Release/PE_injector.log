@@ -1,0 +1,12 @@
+﻿  main.cpp
+  Checker.cpp
+  PEFile.cpp
+  Program.cpp
+  Reader.cpp
+  Writer.cpp
+  Создание кода
+  189 of 664 functions (28.5%) were compiled, the rest were copied from previous compilation.
+    102 functions were new in current compilation
+    104 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  PE_injector.vcxproj -> E:\PE_Test\PE_injector\Release\PE_injector.exe

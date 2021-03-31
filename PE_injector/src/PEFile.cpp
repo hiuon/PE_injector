@@ -9,41 +9,42 @@ PEFile::PEFile(const std::string& in, const std::string& out)
 	output_path = out;
 }
 
-int PEFile::Read()
+enum class STATUS_CODE PEFile::Read()
 {
-	int e = read_pe_header(input_path, data_pe_header, os_type, import_addr, pe_start);
-	if (e != STATUS_OK) {
+	STATUS_CODE e = read_pe_header(input_path, data_pe_header, os_type, import_addr, pe_start);
+	if (e != STATUS_CODE::STATUS_OK) {
 		return e;
 	}
 	e = read_sections(input_path, data_sections, pe_start, import_addr, va_gl, raw_gl);
-	if (e != STATUS_OK) {
+	if (e != STATUS_CODE::STATUS_OK) {
 		return e;
 	}
 	e = read_imports(input_path, data_imports, import_addr, va_gl, raw_gl);
-	if (e != STATUS_OK) {
+	if (e != STATUS_CODE::STATUS_OK) {
 		return e;
 	}
-	return STATUS_OK;
+	return STATUS_CODE::STATUS_OK;
 }
 
-int PEFile::Write()
+enum class STATUS_CODE PEFile::Write()
 {
-	int e = write_pe_header(output_path, data_pe_header);
-	if (e != STATUS_OK) {
+	STATUS_CODE e = write_pe_header(output_path, data_pe_header);
+	if (e != STATUS_CODE::STATUS_OK) {
 		return e;
 	}
 	e = write_sections(output_path, data_sections);
-	if (e != STATUS_OK) {
+	if (e != STATUS_CODE::STATUS_OK) {
 		return e;
 	}
 	e = write_imports(output_path, data_imports);
-	if (e != STATUS_OK) {
+	if (e != STATUS_CODE::STATUS_OK) {
 		return e;
 	}
-	return 0;
+	return STATUS_CODE::STATUS_OK;
 }
 
-int PEFile::Inject()
+enum class STATUS_CODE PEFile::Inject()
 {
-	return 0;
+
+	return STATUS_CODE::STATUS_OK;
 }

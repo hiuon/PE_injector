@@ -2,11 +2,11 @@
 #include <iostream>
 #include <filesystem>
 
-int check_params(int argc, char* argv[], char*& in, char *& out, bool& b)
+STATUS_CODE check_params(int argc, char* argv[], char*& in, char *& out, bool& b)
 {
 	if (argc < 3) {
 		std::cout << "Not enough arguments. Bye...\n";
-		return STATUS_ER_PARAM;
+		return STATUS_CODE::STATUS_ER_PARAM;
 	}
 
 	//check correct path
@@ -14,7 +14,7 @@ int check_params(int argc, char* argv[], char*& in, char *& out, bool& b)
 		if (!std::filesystem::exists(argv[2]) || !std::filesystem::exists(argv[3]))
 		{
 			std::cout << "The file " << argv[2] << " or " << argv[3] << " doesn't exist. Bye...\n";
-			return STATUS_ER_PATH;
+			return STATUS_CODE::STATUS_ER_PATH;
 		}
 		b = true;
 		in = argv[2];
@@ -24,14 +24,14 @@ int check_params(int argc, char* argv[], char*& in, char *& out, bool& b)
 		if (!std::filesystem::exists(argv[1]))
 		{
 			std::cout << "The file " << argv[1] << " doesn't exist. Bye...\n";
-			return STATUS_ER_PATH;
+			return STATUS_CODE::STATUS_ER_PATH;
 		}
 		b = false;
 		in = argv[1];
 		out = argv[2];
 	}
 
-	return STATUS_OK;
+	return STATUS_CODE::STATUS_OK;
 }
 
 

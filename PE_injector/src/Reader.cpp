@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 
-int read_pe_header(const std::string& in_path, std::map<std::string, std::string>& data, unsigned int& os_type, unsigned int& import_addr, unsigned int& pe_start)
+enum class STATUS_CODE read_pe_header(const std::string& in_path, std::map<std::string, std::string>& data, unsigned int& os_type, unsigned int& import_addr, unsigned int& pe_start)
 {
 	std::ifstream in(in_path, std::ios::in | std::ios::binary);
 	//4 byte buffer
@@ -16,7 +16,7 @@ int read_pe_header(const std::string& in_path, std::map<std::string, std::string
 	//if not PE -> end
 	if (temp[0] != 0x4d && temp[1] != 0x5a) {
 		std::cout << "It is not PE file. Bye...\n";
-		return STATUS_ER_NOT_PE;
+		return STATUS_CODE::STATUS_ER_NOT_PE;
 	}
 
 	//go to here
@@ -47,7 +47,7 @@ int read_pe_header(const std::string& in_path, std::map<std::string, std::string
 	if ((temp[1] & 0x01) != 0x01) {
 		os_type = 4;
 		std::cout << "64bit file. Bye...\n";
-		return STATUS_ER_NOT_I386;
+		return STATUS_CODE::STATUS_ER_NOT_I386;
 	}
 	
 
@@ -92,7 +92,7 @@ int read_pe_header(const std::string& in_path, std::map<std::string, std::string
 
 	in.close();
 
-	return 0;
+	return STATUS_CODE::STATUS_OK;
 }
 
 std::string to_hex(char t)
@@ -129,7 +129,7 @@ std::string get_field(char* t, size_t size)
 	return ss.str();
 }
 
-int read_sections(const std::string& input, std::vector<std::string>& data, unsigned int pe_start, unsigned int& import_addr, unsigned int& va_gl, unsigned int& raw_gl) {
+enum class STATUS_CODE read_sections(const std::string& input, std::vector<std::string>& data, unsigned int pe_start, unsigned int& import_addr, unsigned int& va_gl, unsigned int& raw_gl) {
 	std::ifstream in(input, std::ios::binary);
 	char temp[8] = { 0,0,0,0,0,0,0,0 };
 
@@ -140,10 +140,6 @@ int read_sections(const std::string& input, std::vector<std::string>& data, unsi
 	size_t num_sections = (temp[1] <<= 8) + temp[0];
 
 	data.resize(num_sections);
-
-	
-
-
 
 	for (size_t index = 0; index < data.size(); ++index) {
 		in.seekg(pe_start+index*0x28);
@@ -168,10 +164,10 @@ int read_sections(const std::string& input, std::vector<std::string>& data, unsi
 		
 	}
 	in.close();
-	return 0;
+	return STATUS_CODE::STATUS_OK;
 }
 
-int read_imports(const std::string& input, std::vector<std::string>& data,unsigned int import_addr, unsigned int va_gl, unsigned int raw_gl)
+enum class STATUS_CODE read_imports(const std::string& input, std::vector<std::string>& data,unsigned int import_addr, unsigned int va_gl, unsigned int raw_gl)
 {
 	std::ifstream in(input, std::ios::binary);
 	
@@ -196,5 +192,5 @@ int read_imports(const std::string& input, std::vector<std::string>& data,unsign
 	
 	in.close();
 
-	return 0;
+	return STATUS_CODE::STATUS_OK;
 }

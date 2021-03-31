@@ -1,10 +1,11 @@
 #include "../headers/Writer.h"
+#include "../headers/Checker.h"
 #include <map>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
-int write_pe_header(const std::string& out, const std::map<std::string, std::string>& data)
+enum class STATUS_CODE write_pe_header(const std::string& out, const std::map<std::string, std::string>& data)
 {
 	std::fstream out_file(out, std::ios::out);
 	out_file << "{\n";
@@ -12,10 +13,10 @@ int write_pe_header(const std::string& out, const std::map<std::string, std::str
 		out_file << "\t\"" << it->first << "\" : \"" << it->second << "\",\n";
 	}
 	out_file.close();
-	return 0;
+	return STATUS_CODE::STATUS_OK;
 }
 
-int write_sections(const std::string& out, const std::vector<std::string>& data)
+enum class STATUS_CODE write_sections(const std::string& out, const std::vector<std::string>& data)
 {
 	std::fstream out_file(out, std::ios::out | std::ios::app);
 	out_file << "\t\"sections\" : \n\t[\n";
@@ -25,10 +26,10 @@ int write_sections(const std::string& out, const std::vector<std::string>& data)
 	out_file << "\t\t\"" << data.back() << "\"\n";
 	out_file << "\t],\n\t\n";
 	out_file.close();
-	return 0;
+	return STATUS_CODE::STATUS_OK;
 }
 
-int write_imports(const std::string& out, const std::vector<std::string>& data)
+enum class STATUS_CODE write_imports(const std::string& out, const std::vector<std::string>& data)
 {
 	std::fstream out_file(out, std::ios::out | std::ios::app);
 	out_file << "\t\"imports\" : \n\t[\n";
@@ -38,5 +39,5 @@ int write_imports(const std::string& out, const std::vector<std::string>& data)
 	out_file << "\t\t\"" << data.back() << "\"\n";
 	out_file << "\t]\n}";
 	out_file.close();
-	return 0;
+	return STATUS_CODE::STATUS_OK;
 }
