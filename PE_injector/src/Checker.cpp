@@ -2,7 +2,7 @@
 #include <iostream>
 #include <filesystem>
 
-STATUS_CODE check_params(int argc, char* argv[], char*& in, char *& out, bool& b)
+STATUS_CODE check_params(int argc, char* argv[], char*& in, char *& out, bool& injector, bool& stealth)
 {
 	if (argc < 3) {
 		std::cout << "Not enough arguments. Bye...\n";
@@ -11,14 +11,20 @@ STATUS_CODE check_params(int argc, char* argv[], char*& in, char *& out, bool& b
 
 	//check correct path
 	if (!strcmp(argv[1], "-al")) {
+
 		if (!std::filesystem::exists(argv[2]) || !std::filesystem::exists(argv[3]))
 		{
 			std::cout << "The file " << argv[2] << " or " << argv[3] << " doesn't exist. Bye...\n";
 			return STATUS_CODE::STATUS_ER_PATH;
 		}
-		b = true;
+		injector = true;
 		in = argv[2];
 		out = argv[3];
+
+		if (argc > 4 && !strcmp(argv[4], "-stealth")) {
+			stealth = true;
+		}
+		
 	}
 	else {
 		if (!std::filesystem::exists(argv[1]))
@@ -26,7 +32,7 @@ STATUS_CODE check_params(int argc, char* argv[], char*& in, char *& out, bool& b
 			std::cout << "The file " << argv[1] << " doesn't exist. Bye...\n";
 			return STATUS_CODE::STATUS_ER_PATH;
 		}
-		b = false;
+		injector = false;
 		in = argv[1];
 		out = argv[2];
 	}

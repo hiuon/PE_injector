@@ -11,7 +11,9 @@ enum class STATUS_CODE {
 	STATUS_ER_WRITE = 13,
 	STATUS_ER_PARAM = 20,
 	STATUS_ER_NOT_PE = 30,
-	STATUS_ER_NOT_I386 = 40
+	STATUS_ER_NOT_I386 = 40,
+	STATUS_ER_DOTNET_FILE = 50,
+	STATUS_ER_FILE_WITH_DS = 60
 };
 
 const std::map<STATUS_CODE, std::string> st_code_str = {
@@ -22,7 +24,9 @@ const std::map<STATUS_CODE, std::string> st_code_str = {
 	{STATUS_CODE::STATUS_ER_PARAM, "ERROR PARAMETERES"},
 	{STATUS_CODE::STATUS_ER_NOT_PE, "ERROR NOT PE FILE"},
 	{STATUS_CODE::STATUS_ER_NOT_I386, "ERROR NOT 32 BIT PE"},
+	{STATUS_CODE::STATUS_ER_DOTNET_FILE, "ERROR .NET FILE"},
+	{STATUS_CODE::STATUS_ER_FILE_WITH_DS, "ERROR FILE WITH DIGITAL SIGNATURE"}
 };
 
-STATUS_CODE check_params(int argc, char* argv[], char*& in, char*& out, bool& b);
+STATUS_CODE check_params(int argc, char* argv[], char*& in, char*& out, bool& injector, bool& stealth);
 

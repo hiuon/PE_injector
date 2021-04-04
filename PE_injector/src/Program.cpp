@@ -11,7 +11,7 @@ Program::Program(int argc, char* argv[])
 {
 	char* in = nullptr;
 	char* out = nullptr;
-	STATUS_CODE e = check_params(argc, argv, in, out, is_injector);
+	STATUS_CODE e = check_params(argc, argv, in, out, is_injector, is_stealth);
 	if (e != STATUS_CODE::STATUS_OK) {
 		is_ok = e;
 	}
