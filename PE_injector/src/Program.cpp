@@ -11,7 +11,7 @@ Program::Program(int argc, char* argv[])
 {
 	char* in = nullptr;
 	char* out = nullptr;
-	STATUS_CODE e = check_params(argc, argv, in, out, is_injector, is_stealth);
+	STATUS_CODE e = check_params(argc, argv, in, out, is_injector, is_stealth, library_name);
 	if (e != STATUS_CODE::STATUS_OK) {
 		is_ok = e;
 	}
@@ -28,7 +28,17 @@ enum class STATUS_CODE Program::start()
 	if (is_ok != STATUS_CODE::STATUS_OK) return is_ok;
 	PEFile pe = PEFile(input_path, output_path);
 	if (is_injector) {
-		return pe.Inject();
+		STATUS_CODE e = pe.Read();
+		if (e != STATUS_CODE::STATUS_OK)
+		{
+			return e;
+		}
+		e =  pe.Inject();
+		if (e != STATUS_CODE::STATUS_OK)
+		{
+			return e;
+		}
+		return STATUS_CODE::STATUS_OK;
 	}
 	else {
 		STATUS_CODE e = pe.Read();

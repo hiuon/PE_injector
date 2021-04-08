@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Injector.cpp" />
     <ClCompile Include="src\PEFile.cpp" />
     <ClCompile Include="src\Program.cpp" />
     <ClCompile Include="src\Reader.cpp" />
@@ -150,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Checker.h" />
+    <ClInclude Include="headers\Injector.h" />
     <ClInclude Include="headers\Program.h" />
     <ClInclude Include="headers\Reader.h" />
     <ClInclude Include="headers\Writer.h" />

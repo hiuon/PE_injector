@@ -129,7 +129,7 @@ std::string get_field(char* t, size_t size)
 	return ss.str();
 }
 
-enum class STATUS_CODE read_sections(const std::string& input, std::vector<std::string>& data, unsigned int pe_start, unsigned int& import_addr, unsigned int& va_gl, unsigned int& raw_gl) {
+enum class STATUS_CODE read_sections(const std::string& input, std::vector<std::string>& data, unsigned int pe_start, unsigned int& import_addr, unsigned int& va_gl, unsigned int& raw_gl, unsigned int& virt_size, unsigned int& raw_data, unsigned int& pointer_to_section) {
 	std::ifstream in(input, std::ios::binary);
 	char temp[8] = { 0,0,0,0,0,0,0,0 };
 
@@ -147,7 +147,9 @@ enum class STATUS_CODE read_sections(const std::string& input, std::vector<std::
 		in.read(temp, 8);
 		data[index] = temp;
 
-		in.seekg(0x4, std::ios::cur);
+		in.read(temp, 4);
+		unsigned int virt_size_ = get_byte(temp);
+
 		in.read(temp, 4);
 		unsigned int va = get_byte(temp);
 
@@ -160,6 +162,9 @@ enum class STATUS_CODE read_sections(const std::string& input, std::vector<std::
 			import_addr = import_addr - va + pointer_to_raw;
 			va_gl = va;
 			raw_gl = pointer_to_raw;
+			virt_size = virt_size_;
+			raw_data = size_raw;
+			pointer_to_section = pe_start + index * 0x28 + 0xf8;
 		}
 		
 	}
@@ -167,7 +172,7 @@ enum class STATUS_CODE read_sections(const std::string& input, std::vector<std::
 	return STATUS_CODE::STATUS_OK;
 }
 
-enum class STATUS_CODE read_imports(const std::string& input, std::vector<std::string>& data,unsigned int import_addr, unsigned int va_gl, unsigned int raw_gl)
+enum class STATUS_CODE read_imports(const std::string& input, std::vector<std::string>& data,unsigned int import_addr, unsigned int va_gl, unsigned int raw_gl, unsigned int& number_of_imports)
 {
 	std::ifstream in(input, std::ios::binary);
 	
@@ -189,7 +194,7 @@ enum class STATUS_CODE read_imports(const std::string& input, std::vector<std::s
 		in.read(name, 4);
 
 	} while (name[0] != '\0');
-	
+	number_of_imports = index;
 	in.close();
 
 	return STATUS_CODE::STATUS_OK;
