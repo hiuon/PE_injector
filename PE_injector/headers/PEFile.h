@@ -29,7 +29,7 @@ public:
 
 	enum class STATUS_CODE Write();
 
-	enum class STATUS_CODE Inject();
+	enum class STATUS_CODE Inject(bool is_stealth);
 
 };
 

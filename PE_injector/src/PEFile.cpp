@@ -44,12 +44,21 @@ enum class STATUS_CODE PEFile::Write()
 	return STATUS_CODE::STATUS_OK;
 }
 
-enum class STATUS_CODE PEFile::Inject()
+enum class STATUS_CODE PEFile::Inject(bool is_stealth)
 {
-	STATUS_CODE e = check_file_for_inject(virt_size, size_raw_data, number_of_imports);
+	STATUS_CODE e;
+	if (is_stealth) e = check_dot_net_and_signature(input_path, pe_start);
 	if (e != STATUS_CODE::STATUS_OK) {
 		return e;
 	}
+
+	e = check_file_for_inject(virt_size, size_raw_data, number_of_imports);
+	if (e != STATUS_CODE::STATUS_OK) {
+		return e;
+	}
+
+	
+
 	e = inject(input_path, output_path, import_addr, number_of_imports, size_raw_data, raw_gl, va_gl, pointer_to_section, pe_start);
 	if (e != STATUS_CODE::STATUS_OK) {
 		return e;

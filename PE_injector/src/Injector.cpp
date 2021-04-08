@@ -14,12 +14,7 @@ void get_char(unsigned int value, char* temp) {
 
 }
 
-bool is_clear(char* str, int length) {
-	for (size_t index = 0; index < length; ++index) {
-		if (str[index] != '\0') return false;
-	}
-	return true;
-}
+
 
 STATUS_CODE inject(const std::string& input, const std::string& dll_name,unsigned int import_addr, unsigned int number_of_imports, unsigned int raw_data, unsigned int pointer_to_raw, unsigned int va_gl, unsigned int& pointer_to_section, unsigned int pe_start)
 {
@@ -71,7 +66,7 @@ STATUS_CODE inject(const std::string& input, const std::string& dll_name,unsigne
 	in.write(dll_name.c_str(), dll_name.size());
 	
 
-	
+	in.close();
 
 	return STATUS_CODE::STATUS_OK;
 }

@@ -11,6 +11,13 @@ void split(const std::string& s, char delim, std::vector<std::string>& elems) {
 	}
 }
 
+bool is_clear(char* str, int length) {
+	for (size_t index = 0; index < length; ++index) {
+		if (str[index] != '\0') return false;
+	}
+	return true;
+}
+
 STATUS_CODE check_params(int argc, char* argv[], char*& in, char *& out, bool& injector, bool& stealth, std::string& library_name)
 {
 	if (argc < 3) {
@@ -65,6 +72,22 @@ STATUS_CODE check_file_for_inject(unsigned int virt_size, unsigned int size_raw_
 	if (size_raw_data - virt_size <= (number_of_imports + 1) * 0x14) {
 		return STATUS_CODE::STATUS_ER_NOT_ENOUGH_FREE_SPACE;
 	}
+	return STATUS_CODE::STATUS_OK;
+}
+
+STATUS_CODE check_dot_net_and_signature(const std::string& in_path, unsigned int pe_start)
+{
+	std::fstream in(in_path, std::ios::binary | std::ios::in);
+	char temp[8] = { 0 };
+	in.seekg(pe_start + 0x98);
+	in.read(temp, 8);
+	if (!is_clear(temp, 8)) return STATUS_CODE::STATUS_ER_FILE_WITH_DS;
+
+	in.seekg(pe_start + 0x80 + 0x68);
+	in.read(temp, 8);
+	if (!is_clear(temp, 8)) return STATUS_CODE::STATUS_ER_DOTNET_FILE;
+
+	in.close();
 	return STATUS_CODE::STATUS_OK;
 }
 

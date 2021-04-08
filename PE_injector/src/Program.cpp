@@ -33,7 +33,7 @@ enum class STATUS_CODE Program::start()
 		{
 			return e;
 		}
-		e =  pe.Inject();
+		e =  pe.Inject(is_stealth);
 		if (e != STATUS_CODE::STATUS_OK)
 		{
 			return e;
