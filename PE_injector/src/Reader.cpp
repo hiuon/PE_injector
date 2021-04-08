@@ -44,7 +44,7 @@ enum class STATUS_CODE read_pe_header(const std::string& in_path, std::map<std::
 
 	//add kostyl' )
 	os_type = 0;
-	if ((temp[1] & 0x01) != 0x01) {
+	if ((temp[1] & 0x01) != 0x01 && data["cputype"] != "0x014c") {
 		os_type = 4;
 		std::cout << "64bit file. Bye...\n";
 		return STATUS_CODE::STATUS_ER_NOT_I386;
