@@ -3,6 +3,7 @@
 #include "../headers/Checker.h"
 #include "../headers/Injector.h"
 #include "../headers/Reader.h"
+#include "../headers/status_code.h"
 
 void get_char(unsigned int value, char* temp) {
 	size_t index = 0;
@@ -18,8 +19,9 @@ void get_char(unsigned int value, char* temp) {
 
 STATUS_CODE inject(const std::string& input, const std::string& dll_name,unsigned int import_addr, unsigned int number_of_imports, unsigned int raw_data, unsigned int pointer_to_raw, unsigned int va_gl, unsigned int& pointer_to_section, unsigned int pe_start)
 {
-	char temp[2048] = { 0 };
-	char check[2048] = { 0 };
+	//create array of chars
+	char* temp = new char[(number_of_imports +2)* 0x14]{ 0 };
+	char* check = new char[(number_of_imports + 2) * 0x14]{ 0 };
 	std::fstream in(input, std::ios::binary | std::ios::in | std::ios::out);
 	in.seekg(import_addr);
 	in.read(temp, number_of_imports*0x14);
@@ -28,7 +30,7 @@ STATUS_CODE inject(const std::string& input, const std::string& dll_name,unsigne
 	in.read(check, (number_of_imports + 2) * 0x14);
 
 	//mmmm.....
-	if (!is_clear(check, 2048)) {
+	if (!is_clear(check, (number_of_imports + 2) * 0x14)) {
 		return STATUS_CODE::STATUS_ER_NOT_ENOUGH_FREE_SPACE;
 	}
 	//mm...
@@ -47,7 +49,6 @@ STATUS_CODE inject(const std::string& input, const std::string& dll_name,unsigne
 	//change size of section
 	in.seekg(pointer_to_section + 8);
 	get_char(raw_data, temp_char);
-	std::cout << temp_char[0] << temp_char[1] << temp_char[2] << temp_char[3];
 	in.write(temp_char, 4);
 
 	//change pointer to imprva
@@ -67,6 +68,9 @@ STATUS_CODE inject(const std::string& input, const std::string& dll_name,unsigne
 	
 
 	in.close();
+	//clear memory
+	delete[]temp;
+	delete[]check;
 
 	return STATUS_CODE::STATUS_OK;
 }

@@ -1,11 +1,12 @@
 #include "../headers/Reader.h"
 #include "../headers/Checker.h"
+#include "../headers/status_code.h"
 #include <map>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
-enum class STATUS_CODE read_pe_header(const std::string& in_path, std::map<std::string, std::string>& data, unsigned int& os_type, unsigned int& import_addr, unsigned int& pe_start)
+STATUS_CODE read_pe_header(const std::string& in_path, std::map<std::string, std::string>& data, unsigned int& os_type, unsigned int& import_addr, unsigned int& pe_start)
 {
 	std::ifstream in(in_path, std::ios::in | std::ios::binary);
 	//4 byte buffer
@@ -129,7 +130,7 @@ std::string get_field(char* t, size_t size)
 	return ss.str();
 }
 
-enum class STATUS_CODE read_sections(const std::string& input, std::vector<std::string>& data, unsigned int pe_start, unsigned int& import_addr, unsigned int& va_gl, unsigned int& raw_gl, unsigned int& virt_size, unsigned int& raw_data, unsigned int& pointer_to_section) {
+STATUS_CODE read_sections(const std::string& input, std::vector<std::string>& data, unsigned int pe_start, unsigned int& import_addr, unsigned int& va_gl, unsigned int& raw_gl, unsigned int& virt_size, unsigned int& raw_data, unsigned int& pointer_to_section) {
 	std::ifstream in(input, std::ios::binary);
 	char temp[8] = { 0,0,0,0,0,0,0,0 };
 
@@ -172,7 +173,7 @@ enum class STATUS_CODE read_sections(const std::string& input, std::vector<std::
 	return STATUS_CODE::STATUS_OK;
 }
 
-enum class STATUS_CODE read_imports(const std::string& input, std::vector<std::string>& data,unsigned int import_addr, unsigned int va_gl, unsigned int raw_gl, unsigned int& number_of_imports)
+STATUS_CODE read_imports(const std::string& input, std::vector<std::string>& data,unsigned int import_addr, unsigned int va_gl, unsigned int raw_gl, unsigned int& number_of_imports)
 {
 	std::ifstream in(input, std::ios::binary);
 	

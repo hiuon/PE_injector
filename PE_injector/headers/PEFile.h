@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include "../headers/status_code.h"
 
 class PEFile
 {
@@ -25,11 +26,11 @@ private:
 public:
 	PEFile(const std::string& in, const std::string& out);
 
-	enum class STATUS_CODE Read();
+	STATUS_CODE Read();
 
-	enum class STATUS_CODE Write();
+	STATUS_CODE Write();
 
-	enum class STATUS_CODE Inject(bool is_stealth);
+	STATUS_CODE Inject(bool is_stealth);
 
 };
 

@@ -6,6 +6,7 @@
 #include "../headers/Program.h"
 #include "../headers/Checker.h"
 #include "../headers/PEFile.h"
+#include "../headers/status_code.h"
 
 Program::Program(int argc, char* argv[])
 {
@@ -23,7 +24,7 @@ Program::Program(int argc, char* argv[])
 
 }
 
-enum class STATUS_CODE Program::start()
+STATUS_CODE Program::start()
 {
 	if (is_ok != STATUS_CODE::STATUS_OK) return is_ok;
 	PEFile pe = PEFile(input_path, output_path);

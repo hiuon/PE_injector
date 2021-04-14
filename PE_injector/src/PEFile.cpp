@@ -3,6 +3,7 @@
 #include "../headers/Reader.h"
 #include "../headers/Writer.h"
 #include "../headers/Injector.h"
+#include "../headers/status_code.h"
 
 PEFile::PEFile(const std::string& in, const std::string& out)
 {
@@ -10,7 +11,7 @@ PEFile::PEFile(const std::string& in, const std::string& out)
 	output_path = out;
 }
 
-enum class STATUS_CODE PEFile::Read()
+STATUS_CODE PEFile::Read()
 {
 	STATUS_CODE e = read_pe_header(input_path, data_pe_header, os_type, import_addr, pe_start);
 	if (e != STATUS_CODE::STATUS_OK) {
@@ -27,7 +28,7 @@ enum class STATUS_CODE PEFile::Read()
 	return STATUS_CODE::STATUS_OK;
 }
 
-enum class STATUS_CODE PEFile::Write()
+STATUS_CODE PEFile::Write()
 {
 	STATUS_CODE e = write_pe_header(output_path, data_pe_header);
 	if (e != STATUS_CODE::STATUS_OK) {
@@ -44,9 +45,9 @@ enum class STATUS_CODE PEFile::Write()
 	return STATUS_CODE::STATUS_OK;
 }
 
-enum class STATUS_CODE PEFile::Inject(bool is_stealth)
+STATUS_CODE PEFile::Inject(bool is_stealth)
 {
-	STATUS_CODE e;
+	STATUS_CODE e = STATUS_CODE::STATUS_OK;
 	if (is_stealth) e = check_dot_net_and_signature(input_path, pe_start);
 	if (e != STATUS_CODE::STATUS_OK) {
 		return e;
@@ -64,9 +65,6 @@ enum class STATUS_CODE PEFile::Inject(bool is_stealth)
 		return e;
 	}
 
-	std::cout << "here";
-
-	
 
 	return STATUS_CODE::STATUS_OK;
 }

@@ -1,12 +1,24 @@
-#include "./headers/Checker.h"
 #include "./headers/Program.h"
 
 int main(int argc, char* argv[]) {
 
+	std::map<STATUS_CODE, std::string> st_code_str = {
+	{STATUS_CODE::STATUS_OK, "OK"},
+	{STATUS_CODE::STATUS_ER_WRITE, "ERROR WRITE"},
+	{STATUS_CODE::STATUS_ER_READ, "ERROR READ"},
+	{STATUS_CODE::STATUS_ER_PATH, "ERROR PATH"},
+	{STATUS_CODE::STATUS_ER_PARAM, "ERROR PARAMETERES"},
+	{STATUS_CODE::STATUS_ER_NOT_PE, "ERROR NOT PE FILE"},
+	{STATUS_CODE::STATUS_ER_NOT_I386, "ERROR NOT 32 BIT PE"},
+	{STATUS_CODE::STATUS_ER_DOTNET_FILE, "ERROR .NET FILE"},
+	{STATUS_CODE::STATUS_ER_FILE_WITH_DS, "ERROR FILE WITH DIGITAL SIGNATURE"},
+	{STATUS_CODE::STATUS_ER_NOT_ENOUGH_FREE_SPACE, "ERROR NOT ENOUGH FREE SPACE"}
+	};
+
 	Program parser = Program(argc, argv);
 	STATUS_CODE e = parser.start();
+	std::cout << "STATUS MESSAGE: " << st_code_str.at(e) << "\n";
 	if (e != STATUS_CODE::STATUS_OK) {
-		std::cout << "STATUS MESSAGE: " << st_code_str.at(e) << "\n";
 		return -1;
 	}
 
